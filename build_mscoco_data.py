@@ -93,8 +93,6 @@ import random
 import sys
 import threading
 
-
-
 import nltk.tokenize
 import numpy as np
 from six.moves import xrange
@@ -164,7 +162,7 @@ def _int64_feature(value):
 
 def _bytes_feature(value):
   """Wrapper for inserting a bytes Feature into a SequenceExample proto."""
-  return tf.train.Feature(bytes_list=tf.train.BytesList(value=[str(value)]))
+  return tf.train.Feature(bytes_list=tf.train.BytesList(value=[bytes(str(value), "utf-8")]))
 
 
 def _int64_feature_list(values):
@@ -188,7 +186,7 @@ def _to_sequence_example(image, decoder, vocab):
   Returns:
     A SequenceExample proto.
   """
-  with tf.gfile.FastGFile(image.filename, "r") as f:
+  with tf.gfile.FastGFile(image.filename, "rb") as f:
     encoded_image = f.read()
 
   try:
@@ -345,7 +343,7 @@ def _load_and_process_metadata(captions_file, image_dir):
   Returns:
     A list of ImageMetadata.
   """
-  with tf.gfile.FastGFile(captions_file, "r") as f:
+  with tf.gfile.FastGFile(captions_file, "rb") as f:
     caption_data = json.load(f)
 
   # Extract the filenames.

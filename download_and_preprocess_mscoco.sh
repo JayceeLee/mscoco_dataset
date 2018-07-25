@@ -80,10 +80,10 @@ VAL_CAPTIONS_FILE="${SCRATCH_DIR}/annotations/captions_val2014.json"
 
 # Build TFRecords of the image data.
 cd "${CURRENT_DIR}"
-python2 build_mscoco_data.py \
+python build_mscoco_data.py \
   --train_image_dir="./raw-data/train2014" \
   --val_image_dir="./raw-data/val2014" \
   --train_captions_file="./raw-data/annotations/captions_train2014.json" \
   --val_captions_file="./raw-data/annotations/captions_val2014.json" \
   --output_dir="." \
-  --word_counts_output_file="./word_counts.txt" \
+  --embeddings_dir="../glove/embeddings/" 
