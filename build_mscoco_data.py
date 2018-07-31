@@ -162,7 +162,7 @@ def _int64_feature(value):
 
 def _bytes_feature(value):
   """Wrapper for inserting a bytes Feature into a SequenceExample proto."""
-  return tf.train.Feature(bytes_list=tf.train.BytesList(value=[bytes(str(value), "utf-8")]))
+  return tf.train.Feature(bytes_list=tf.train.BytesList(value=[value]))
 
 
 def _int64_feature_list(values):
@@ -204,7 +204,7 @@ def _to_sequence_example(image, decoder, vocab):
   caption = image.captions[0]
   caption_ids = [vocab.word_to_id(word) for word in caption]
   feature_lists = tf.train.FeatureLists(feature_list={
-      "image/caption": _bytes_feature_list(caption),
+      "image/caption": _bytes_feature_list([bytes(c, "utf-8") for c in caption]),
       "image/caption_ids": _int64_feature_list(caption_ids)
   })
   sequence_example = tf.train.SequenceExample(
@@ -295,7 +295,7 @@ def _process_dataset(name, images, vocab, num_shards):
   spacing = np.linspace(0, len(images), num_threads + 1).astype(np.int)
   ranges = []
   threads = []
-  for i in xrange(len(spacing) - 1):
+  for i in range(len(spacing) - 1):
     ranges.append([spacing[i], spacing[i + 1]])
 
   # Create a mechanism for monitoring when all threads are finished.
